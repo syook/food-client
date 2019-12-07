@@ -1,3 +1,5 @@
+import React from "react";
+import FoodItemsForm from "./form";
 
 import React from 'react'
 import FoodItemsForm from './form'
@@ -19,7 +21,7 @@ export default class FoodItems  extends React.Component{
 
     render(){
         return(
-            <div style={{marginTop:"80px"}}>
+            <div style={{ marginTop: "80px", width: "90vw", maxWidth: 400 }}>
                 
                 {this.state.isAddItem ?<FoodItemsForm toggle={this.toggle}/>:
                 <>
