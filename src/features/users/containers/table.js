@@ -31,7 +31,7 @@ const UserTable = props => {
       </div> */}
       {userDetails.map(item => {
         return (
-          <Card>
+          <Card className="userCard">
             <Card.Content>
               <Card.Header>{item.name}</Card.Header>
               <Card.Meta>{item.email}</Card.Meta>
