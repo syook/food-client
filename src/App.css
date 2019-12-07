@@ -55,3 +55,6 @@
   font-weight: 700;
   margin-bottom: 10px;
 }
+.ui.card {
+  width: 100% !important;
+}
