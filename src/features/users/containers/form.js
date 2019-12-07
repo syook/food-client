@@ -58,7 +58,7 @@ class UserForm extends React.Component {
             <label>Default chapati</label>
             <input
               name="defaultChapati"
-              placeholder="count"
+              placeholder="Chapatis"
               type="number"
               value={this.state.defaultChapati}
               onChange={this.handleChange}
