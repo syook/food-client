@@ -8,7 +8,7 @@ class UserForm extends React.Component {
       name: "",
       email: "",
       mobile: "",
-      defaultChapati: ""
+      defaultChapati: 2
     };
   }
 
