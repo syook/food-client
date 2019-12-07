@@ -23,3 +23,9 @@
 .nav-item {
   padding: 0px;
 }
+.ui.fluid.dropdown {
+  padding: 9px 9px 0px 9px;
+  border-radius: 5px;
+  height: 38px;
+  border: 1px solid #dededf;
+}

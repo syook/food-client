@@ -1,42 +1,48 @@
-import React from 'react'
-import { Form ,Button} from 'semantic-ui-react'
+import React from "react";
+import { Form, Button } from "semantic-ui-react";
 
+class FoodItemsForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      options: [
+        { text: "Breakfast", value: "breakfast" },
+        { text: "Lunch", value: "lunch" }
+      ],
+      selectedType: "breakfast"
+    };
+  }
 
-class FoodItemsForm extends React.Component{
-    constructor(props){
-        super(props)
-        this.state={
-            name:'',
-            options:[{text:'Breakfast',value:'breakfast'},{text:'Lunch',value:'lunch'}],
-            selectedType:''
-    }
-}
+  handleChange = e => {
+    if (e.target) this.setState({ [e.target.name]: e.target.value });
+    else this.setState({ selectedType: e });
+  };
+  handleSubmit = e => {
+    e.preventDefault();
+    console.log(this.state);
+    this.setState({ name: "" });
+  };
 
-    handleChange=(e)=>{
-        if(e.target) this.setState({[e.target.name]:e.target.value})
-        
-        else this.setState({selectedType:e})
-
-    }
-    handleSubmit=(e)=>{
-        e.preventDefault()
-        console.log(this.state)
-        this.setState({ name: "" });
-
-    }
-
-
-render(){
-    return(
-            <div>
-            <Form>
+  render() {
+    return (
+      <div>
+        <Form>
           <Form.Field>
-            <Form.Select
+            {/* <Form.Select
               fluid
               label="Type"
               name="selectedType"
               options={this.state.options}
               placeholder="Type"
+              onChange={(e, { value }) => this.handleChange(value)}
+            /> */}
+            <Form.Dropdown
+              fluid
+              name="defaultRice"
+              defaultValue={"breakfast"}
+              placeholder="Rice"
+              options={this.state.options}
               onChange={(e, { value }) => this.handleChange(value)}
             />
           </Form.Field>
@@ -50,13 +56,14 @@ render(){
               onChange={this.handleChange}
             />
           </Form.Field>
-                <Button onClick={this.props.toggle}>Cancel</Button>
-                <Button type='submit' onClick={this.handleSubmit}>Submit</Button>
-
-            </Form>
-            </div>
-        )
-    }
+          <Button onClick={this.props.toggle}>Cancel</Button>
+          <Button type="submit" onClick={this.handleSubmit}>
+            Submit
+          </Button>
+        </Form>
+      </div>
+    );
+  }
 }
 
 export default FoodItemsForm;

@@ -13,12 +13,14 @@ class UserForm extends React.Component {
         { text: "Half Bowl", value: 0.5 },
         { text: "Full Bowl", value: 1 },
         { text: "Double Bowl", value: 2 }
-      ]
+      ],
+      riceProtion: 0.5
     };
   }
 
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    if (e.target) this.setState({ [e.target.name]: e.target.value });
+    else this.setState({ riceProtion: e });
   };
   handleSubmit = e => {
     e.preventDefault();
@@ -70,10 +72,11 @@ class UserForm extends React.Component {
             />
           </Form.Field>
           <Form.Field>
-            <label>Default Rice proption</label>
-            <Form.Select
+            <label>Default Rice portion</label>
+            <Form.Dropdown
               fluid
               name="defaultRice"
+              defaultValue={0.5}
               placeholder="Rice"
               options={this.state.options}
               onChange={(e, { value }) => this.handleChange(value)}
