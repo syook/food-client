@@ -24,6 +24,10 @@ export default class FoodItems extends React.Component {
     this.setState({ isAddItem: !this.state.isAddItem });
   };
 
+  componentDidMount(){
+      //api call
+  }
+
   render() {
     return (
       <div style={{ marginTop: "80px", width: "90vw", maxWidth: 400 }}>
@@ -31,8 +35,7 @@ export default class FoodItems extends React.Component {
           <FoodItemsForm toggle={this.toggle} />
         ) : (
           <>
-            <Button onClick={this.toggle}>Add Food Item</Button>
-            <FoodItemTable currentData={this.state.data} />
+            <FoodItemTable currentData={this.state.data} children={<Button onClick={this.toggle}>Add Food Item</Button>}/>
           </>
         )}
       </div>

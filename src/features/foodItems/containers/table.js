@@ -26,10 +26,9 @@ const FoodItemTable = props => {
     <SyookTable
       // actionOnHover
       columnDefs={columnDefs({ ...props })}
-      key={props.workOrderableFilter + props.woType + props.workOrderCount}
+      key={props.currentData}
       data={props.currentData || []}
       mandatoryFields={["Name", "Type"]}
-      tableScroll={true}
       tableName={"Food Items"}
     >
       {props.children}
