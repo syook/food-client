@@ -23,9 +23,35 @@
 .nav-item {
   padding: 0px;
 }
+.pt-10 {
+  padding-top: 10px;
+}
+.pt-20 {
+  padding-top: 20px;
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.full-width {
+  width: 90vw;
+}
+.flex-start {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
 .ui.fluid.dropdown {
   padding: 9px 9px 0px 9px;
   border-radius: 5px;
   height: 38px;
   border: 1px solid #dededf;
+}
+.info label {
+  font-size: 17px;
+}
+.info .label {
+  font-weight: 700;
+  margin-bottom: 10px;
 }
