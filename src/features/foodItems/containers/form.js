@@ -42,7 +42,7 @@ class FoodItemsForm extends React.Component {
             <label> Name</label>
             <input
               name="name"
-              placeholder="First Name"
+              placeholder="Item Name"
               type="text"
               value={this.state.name}
               onChange={this.handleChange}
