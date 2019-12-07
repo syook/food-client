@@ -2,7 +2,7 @@ import React from 'react'
 import { Form ,Button} from 'semantic-ui-react'
 
 
-class Users extends React.Component{
+class Userform extends React.Component{
     constructor(props){
         super(props)
         this.state={
@@ -52,4 +52,4 @@ render(){
     }
 }
 
-export default Users
+export default Userform
