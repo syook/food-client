@@ -43,8 +43,9 @@ render(){
                     onChange={(e,{value})=>this.handleChange(value)}
                 />
                 </Form.Field>
-                
+                <Button onClick={this.props.toggle}>Cancel</Button>
                 <Button type='submit' onClick={this.handleSubmit}>Submit</Button>
+
             </Form>
             </div>
         )
