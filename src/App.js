@@ -1,8 +1,9 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import Navbar from "./commonComponents/navbar";
+import "semantic-ui-css/semantic.min.css";
+import "./App.css";
 
 import Users from './features/users/containers/form'
-
 import 'semantic-ui-css/semantic.min.css'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <div className="App">
     <Users/>
 
+      <Navbar />
     </div>
   );
 }
