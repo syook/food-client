@@ -8,7 +8,12 @@ class UserForm extends React.Component {
       name: "",
       email: "",
       mobile: "",
-      defaultChapati: 2
+      defaultChapati: 2,
+      options: [
+        { text: "Half Bowl", value: 0.5 },
+        { text: "Full Bowl", value: 1 },
+        { text: "Double Bowl", value: 2 }
+      ]
     };
   }
 
@@ -55,13 +60,23 @@ class UserForm extends React.Component {
             />
           </Form.Field>
           <Form.Field>
-            <label>Default chapati</label>
+            <label>Default Chapati</label>
             <input
               name="defaultChapati"
               placeholder="Chapatis"
               type="number"
               value={this.state.defaultChapati}
               onChange={this.handleChange}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Default Rice proption</label>
+            <Form.Select
+              fluid
+              name="defaultRice"
+              placeholder="Rice"
+              options={this.state.options}
+              onChange={(e, { value }) => this.handleChange(value)}
             />
           </Form.Field>
 
