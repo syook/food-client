@@ -1,5 +1,5 @@
 import React from 'react'
-import Userform from './form'
+import UserForm from './form'
 
 export default class Users  extends React.Component{
     constructor(props){
@@ -10,7 +10,7 @@ export default class Users  extends React.Component{
     render(){
         return(
             <div style={{marginTop:"80px"}}>
-                <Userform/>
+                <UserForm/>
             </div>
         )
     }

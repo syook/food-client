@@ -1,9 +1,10 @@
 import React from "react";
 import Navbar from "./commonComponents/navbar";
-import {BrowserRouter,Route,Link} from 'react-router-dom'
+import {BrowserRouter,Route,Link,Switch} from 'react-router-dom'
 import "./App.css";
 
 import Users from './features/users/containers'
+import FoodItems from './features/foodItems/containers'
 import 'semantic-ui-css/semantic.min.css'
 
 function App() {
@@ -11,7 +12,10 @@ function App() {
     <BrowserRouter>
     <div className="App">
       <Navbar />
+      <Switch>
       <Route path='/users' component={Users}/>
+      <Route path='/fooditems' component={FoodItems}/>
+      </Switch>
 
     </div>
     </BrowserRouter>
