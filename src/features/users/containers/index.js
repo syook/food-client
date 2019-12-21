@@ -26,7 +26,7 @@ export default class Users extends React.Component {
           <UserForm toggle={this.toggle} />
         ) : (
           <>
-            <UserTable currentData={this.state.data} children={<Button onClick={this.toggle}>Add User</Button>}/>
+            <UserTable currentData={this.state.data} toggle={this.toggle}/>
           </>
         )}
       </div>

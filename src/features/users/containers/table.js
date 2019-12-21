@@ -29,6 +29,7 @@ const UserTable = props => {
           </label>
         </div>
       </div> */}
+      <Button onClick={props.toggle}>Add User</Button>
       {userDetails.map(item => {
         return (
           <Card className="userCard">

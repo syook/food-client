@@ -1,33 +1,25 @@
-import React from "react";
+import React,{useState} from "react";
 import { Form, Button } from "semantic-ui-react";
 
-class UserForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      email: "",
-      mobile: "",
-      defaultChapati: 2,
-      options: [
+function UserForm(props){
+  
+  const options = [
         { text: "Half Bowl", value: 0.5 },
         { text: "Full Bowl", value: 1 },
         { text: "Double Bowl", value: 2 }
-      ],
-      riceProtion: 0.5
-    };
-  }
+      ]
+  const [name,setName] = useState('')
+  const [email,setEmail] = useState('')
+  const [mobile,setMobile] = useState('')
+  const [defaultChapati,setDChapati] = useState(2)
+  const [ricePortion,setRPortion] = useState(0.5)
 
-  handleChange = e => {
-    if (e.target) this.setState({ [e.target.name]: e.target.value });
-    else this.setState({ riceProtion: e });
-  };
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state);
+    console.log(name,email,mobile,defaultChapati,ricePortion)
   };
 
-  render() {
+
     return (
       <div className="formSection">
         <Form>
@@ -37,8 +29,8 @@ class UserForm extends React.Component {
               name="name"
               placeholder="First Name"
               type="text"
-              value={this.state.name}
-              onChange={this.handleChange}
+              value={name}
+              onChange={(e)=>setName(e.target.value)}
             />
           </Form.Field>
           <Form.Field>
@@ -47,8 +39,8 @@ class UserForm extends React.Component {
               name="email"
               placeholder="Email"
               type="email"
-              value={this.state.email}
-              onChange={this.handleChange}
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </Form.Field>
           <Form.Field>
@@ -57,8 +49,8 @@ class UserForm extends React.Component {
               name="mobile"
               placeholder="Mobile"
               type="number"
-              value={this.state.mobile}
-              onChange={this.handleChange}
+              value={mobile}
+              onChange={(e)=>setMobile(e.target.value)}
             />
           </Form.Field>
           <Form.Field>
@@ -67,8 +59,8 @@ class UserForm extends React.Component {
               name="defaultChapati"
               placeholder="Chapatis"
               type="number"
-              value={this.state.defaultChapati}
-              onChange={this.handleChange}
+              value={defaultChapati}
+              onChange={(e)=>setDChapati(e.target.value)}
             />
           </Form.Field>
           <Form.Field>
@@ -78,18 +70,18 @@ class UserForm extends React.Component {
               name="defaultRice"
               defaultValue={0.5}
               placeholder="Rice"
-              options={this.state.options}
-              onChange={(e, { value }) => this.handleChange(value)}
+              options={options}
+              onChange={(e, { value }) => setRPortion(value)}
             />
           </Form.Field>
-          <Button onClick={this.props.toggle}>Cancel</Button>
-          <Button type="submit" onClick={this.handleSubmit}>
+          <Button onClick={props.toggle}>Cancel</Button>
+          <Button type="submit" onClick={handleSubmit}>
             Submit
           </Button>
         </Form>
       </div>
     );
   }
-}
+
 
 export default UserForm;
