@@ -30,12 +30,12 @@ export default class FoodItems extends React.Component {
 
   render() {
     return (
-      <div style={{ marginTop: "80px", width: "90vw", maxWidth: 400 }}>
+      <div style={{ marginTop: "80px", width: "90vw" }}>
         {this.state.isAddItem ? (
           <FoodItemsForm toggle={this.toggle} />
         ) : (
           <>
-            <FoodItemTable currentData={this.state.data} children={<Button onClick={this.toggle}>Add Food Item</Button>}/>
+            <FoodItemTable currentData={this.state.data} toggle={this.toggle}/>
           </>
         )}
       </div>

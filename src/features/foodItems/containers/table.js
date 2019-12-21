@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "semantic-ui-react";
+import { Icon,Button } from "semantic-ui-react";
 
 const FoodItemTable = props => {
   const userDetails = [
@@ -22,6 +22,7 @@ const FoodItemTable = props => {
         <div className="flex-start full-width pt-20 info">
           <label>
             <Icon name="calendar alternate outline" size="med" />:{" "}
+            <Button onClick={props.toggle}>click</Button>
             <span>07/12/2019</span>
           </label>
         </div>
