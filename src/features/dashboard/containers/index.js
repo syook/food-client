@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon, List, Segment } from "semantic-ui-react";
+import moment from 'moment'
 
 function Dashboard() {
   return (
@@ -10,7 +11,7 @@ function Dashboard() {
       <div className="flex-start full-width pt-20 info">
         <label>
           <Icon name="calendar alternate outline" size="med" />:{" "}
-          <span>07/12/2019</span>
+          <span>{moment().format('D/MM/YYYY')}</span>
         </label>
       </div>
       <Segment>
