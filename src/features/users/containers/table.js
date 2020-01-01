@@ -30,9 +30,9 @@ const UserTable = props => {
         </div>
       </div> */}
       <Button onClick={props.toggle}>Add User</Button>
-      {userDetails.map(item => {
+      {userDetails.map((item,i) => {
         return (
-          <Card className="userCard">
+          <Card className="userCard" key={i}>
             <Card.Content>
               <Card.Header>{item.name}</Card.Header>
               <Card.Meta>{item.email}</Card.Meta>

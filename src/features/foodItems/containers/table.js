@@ -19,10 +19,11 @@ const FoodItemTable = props => {
   return (
     <div>
       <div className="full-width formSection">
+      <Button onClick={props.toggle}>Add Food Item</Button>
         <div className="flex-start full-width pt-20 info">
           <label>
             <Icon name="calendar alternate outline" size="med" />:{" "}
-            <Button onClick={props.toggle}>click</Button>
+            
             <span>07/12/2019</span>
           </label>
         </div>
