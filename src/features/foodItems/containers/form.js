@@ -1,5 +1,27 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { Form, Button } from "semantic-ui-react";
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+
+const CREATE_FOOD_ITEM_MUTATION = gql`
+	mutation createFoodItemMutation($name: String!, $type: String!) {
+		createFoodItem(name: $name, type: $type) {
+			_id
+			name
+			type
+		}
+	}
+`;
+
+const UPDATE_FOOD_ITEM_MUTATION = gql`
+	mutation updateFoodItemMutation($id: String!, $name: String!, $type: String!) {
+		updateFoodItem(id: $id, name: $name, type: $type) {
+			_id
+			name
+			type
+		}
+	}
+`;
 
 function FoodItemsForm(props) {
   
@@ -8,15 +30,22 @@ function FoodItemsForm(props) {
         { text: "Lunch", value: "lunch" }
       ]
   const [name,setName] = useState('')
-  const [foodType,setFoodType] = useState('breakfast')
+  const [type,setFoodType] = useState('breakfast')
   const handleSubmit = e => {
     e.preventDefault();
     if(!name){
-      console.log(name,foodType)
+      console.log(name,type)
     }
     
     setName('')  
-  };
+	};
+	useEffect(()=>{
+		if(!!props.foodItem){
+			setName(props.foodItem.name)
+			setFoodType(props.foodItem.type)
+		}
+		},[props.foodItem])
+	console.log(props)
   return (
       <div>
         <Form>
@@ -39,9 +68,37 @@ function FoodItemsForm(props) {
             />
           </Form.Field>
           <Button onClick={props.toggle}>Cancel</Button>
-          <Button type="submit" onClick={handleSubmit}>
-            Submit
-          </Button>
+					{!!props.foodItem ? (
+						<Mutation
+							mutation={UPDATE_FOOD_ITEM_MUTATION}
+							variables={{ id: props.foodItem._id, name, type: type }}
+							onCompleted={props.toggle}
+							update={(store, { data: { updateFoodItem } }) =>
+								props.updateFoodItem(store, updateFoodItem)
+							}
+						>
+							{createFoodItemMutation => (
+								<Button type="submit" onClick={createFoodItemMutation}>
+									Submit
+								</Button>
+							)}
+						</Mutation>
+					) : (
+						<Mutation
+							mutation={CREATE_FOOD_ITEM_MUTATION}
+							variables={{ name, type: type }}
+							onCompleted={props.toggle}
+							update={(store, { data: { createFoodItem } }) =>
+								props.addFoodItem(store, createFoodItem)
+							}
+						>
+							{createFoodItemMutation => (
+								<Button type="submit" onClick={createFoodItemMutation}>
+									Submit
+								</Button>
+							)}
+						</Mutation>
+					)}
         </Form>
       </div>
     );
