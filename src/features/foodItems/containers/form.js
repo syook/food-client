@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from "semantic-ui-react";
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
@@ -24,66 +24,72 @@ const UPDATE_FOOD_ITEM_MUTATION = gql`
 `;
 
 function FoodItemsForm(props) {
-  
-  const options= [
-        { text: "Breakfast", value: "breakfast" },
-        { text: "Lunch", value: "lunch" }
-      ]
-  const [name,setName] = useState('')
-  const [type,setFoodType] = useState('breakfast')
-  const handleSubmit = e => {
-    e.preventDefault();
-    if(!name){
-      console.log(name,type)
-    }
-    
-    setName('')  
+
+	const options = [
+		{ text: "Breakfast", value: "breakfast" },
+		{ text: "Lunch", value: "lunch" }
+	]
+	const [name, setName] = useState('')
+	const [type, setFoodType] = useState('breakfast')
+	const handleSubmit = (set) => {
+		if (!name) {
+			window.alert('add something')
+		}
+		else {
+
+			setName('')
+		}
+
+
 	};
-	useEffect(()=>{
-		if(!!props.foodItem){
+	useEffect(() => {
+		if (!!props.foodItem) {
 			setName(props.foodItem.name)
 			setFoodType(props.foodItem.type)
 		}
-		},[props.foodItem])
-	console.log(props)
-  return (
-      <div>
-        <Form>
-          <Form.Field>
-            <Form.Dropdown
-              fluid
-              defaultValue={'breakfast'}
-              placeholder="Rice"
-              options={options}
-              onChange={(e, { value }) => setFoodType(value)}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label> Name</label>
-            <input
-              placeholder="Item Name"
-              type="text"
-              value={name}
-              onChange={(e)=>setName(e.target.value)}
-            />
-          </Form.Field>
-          <Button onClick={props.toggle}>Cancel</Button>
-					{!!props.foodItem ? (
-						<Mutation
-							mutation={UPDATE_FOOD_ITEM_MUTATION}
-							variables={{ id: props.foodItem._id, name, type: type }}
-							onCompleted={props.toggle}
-							update={(store, { data: { updateFoodItem } }) =>
-								props.updateFoodItem(store, updateFoodItem)
-							}
-						>
-							{createFoodItemMutation => (
-								<Button type="submit" onClick={createFoodItemMutation}>
-									Submit
+	}, [props.foodItem])
+	console.log(props.foodItem)
+	return (
+		<div>
+			<Form>
+				<Form.Field>
+					<Form.Dropdown
+						fluid
+						defaultValue={'breakfast'}
+						placeholder="Rice"
+						options={options}
+						onChange={(e, { value }) => setFoodType(value)}
+					/>
+				</Form.Field>
+				<Form.Field>
+					<label> Name</label>
+					<input
+						placeholder="Item Name"
+						type="text"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
+				</Form.Field>
+				<Button onClick={props.toggle}>Cancel</Button>
+				{!!props.foodItem ? (
+					<Mutation
+						mutation={UPDATE_FOOD_ITEM_MUTATION}
+						variables={{ id: props.foodItem._id, name, type: type }}
+						onCompleted={props.toggle}
+						update={(store, { data: { updateFoodItem } }) =>
+							props.updateFoodItem(store, updateFoodItem)
+						}
+					>
+						{createFoodItemMutation => (
+							<Button type="submit" onClick={() => {
+								handleSubmit()
+								createFoodItemMutation()
+							}}>
+								Update
 								</Button>
-							)}
-						</Mutation>
-					) : (
+						)}
+					</Mutation>
+				) : (
 						<Mutation
 							mutation={CREATE_FOOD_ITEM_MUTATION}
 							variables={{ name, type: type }}
@@ -93,16 +99,19 @@ function FoodItemsForm(props) {
 							}
 						>
 							{createFoodItemMutation => (
-								<Button type="submit" onClick={createFoodItemMutation}>
-									Submit
+								<Button type="submit" onClick={() => {
+									handleSubmit()
+									createFoodItemMutation()
+								}}>
+									Add Item
 								</Button>
 							)}
 						</Mutation>
 					)}
-        </Form>
-      </div>
-    );
-  
+			</Form>
+		</div>
+	);
+
 }
 
 export default FoodItemsForm;

@@ -62,9 +62,10 @@ class FoodItems extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (this.props.match.params.id !== prevProps.match.params.id) {
-			this.fetchFoodItem(this.props.match.params.id);
-		}
+		if (this.props.match.params.id !== prevProps.match.params.id)
+			if (this.props.match.params.id !== prevProps.match.params.id) {
+				this.fetchFoodItem(this.props.match.params.id);
+			}
 	}
 
 	fetchFoodItem = async id => {
@@ -117,7 +118,7 @@ class FoodItems extends React.Component {
 	render() {
 		return (
 			<div style={{ marginTop: '80px', width: '90vw' }}>
-				<FoodItemsForm toggle={this.toggle} addFoodItem={this.addFoodItem} foodItem={this.state.foodItem} />
+				<FoodItemsForm toggle={this.toggle} addFoodItem={this.addFoodItem} updateFoodItem={this.updateFoodItem} foodItem={this.state.foodItem} />
 
 				<>
 					<FoodItemTable currentData={this.state.data} toggle={this.toggle} />
@@ -133,7 +134,7 @@ class FoodItems extends React.Component {
 										<>
 											<p>
 												{foodItem.name} - {foodItem.type} -{' '}
-												<p onClick={() => this.editFoodItem(foodItem._id)}>edit</p>
+												<Button onClick={() => this.editFoodItem(foodItem._id)}>Edit</Button>
 												<Mutation
 													mutation={DElETE_FOOD_ITEM}
 													variables={{ id: foodItem._id }}
@@ -143,7 +144,7 @@ class FoodItems extends React.Component {
 												>
 													{deleteFoodItemMutation => (
 														<Button type="submit" onClick={deleteFoodItemMutation}>
-															delete
+															Delete
 														</Button>
 													)}
 												</Mutation>
