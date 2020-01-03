@@ -48,7 +48,7 @@ function FoodItemsForm(props) {
 			setFoodType(props.foodItem.type)
 		}
 	}, [props.foodItem])
-	console.log(props.foodItem)
+
 	return (
 		<div>
 			<Form>

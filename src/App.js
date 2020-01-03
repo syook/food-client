@@ -15,11 +15,12 @@ function App() {
 			<div className="App">
 				<Navbar />
 				<Switch>
-					<Route path="/dashboard" component={Dashboard} />
-					<Route path="/users" component={Users} />
+					<Route path="/dashboard" component={Dashboard} exact />
+					<Route path="/users" component={Users} exact />
 
 					<Route path="/fooditems" component={FoodItems} exact />
 					<Route path="/fooditems/:id" component={FoodItems} exact />
+					<Route path="/users/:id" component={Users} exact />
 
 				</Switch>
 			</div>

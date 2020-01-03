@@ -1,77 +1,57 @@
 import React from "react";
-import SyookTable from "@syook/react-tabulous";
 import { Icon, Card, Button } from "semantic-ui-react";
+import { Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
+const DELETE_USER = gql`
+	mutation deleteUserMutation($id: String!) {
+		deleteUser(id: $id) {
+			_id
+		}
+	}
+`;
 
 const UserTable = props => {
-  const userDetails = [
-    {
-      name: "Shyam",
-      email: "shyam@syook.com",
-      phone: 9876543210,
-      defaultChapati: 2,
-      defaultRicePortion: "Full"
-    },
-    {
-      name: "Ram",
-      email: "ram@syook.com",
-      phone: 9876543210,
-      defaultChapati: 1,
-      defaultRicePortion: "Double"
-    }
-  ];
   return (
     <div>
-      {/* <div className="full-width formSection">
-        <div className="flex-start full-width pt-20 info">
-          <label>
-            <Icon name="calendar alternate outline" size="med" />:{" "}
-            <span>07/12/2019</span>
-          </label>
-        </div>
-      </div> */}
-      <Button onClick={props.toggle}>Add User</Button>
-      {userDetails.map((item,i) => {
+      {[props.currentData].map((item, i) => {
         return (
           <Card className="userCard" key={i}>
             <Card.Content>
               <Card.Header>{item.name}</Card.Header>
               <Card.Meta>{item.email}</Card.Meta>
-              <Card.Meta>{item.phone}</Card.Meta>
+              <Card.Meta>{item.mobile}</Card.Meta>
               <Card.Description
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <span>
-                  Default Chapati :<strong> {item.defaultChapati}</strong>
+                  Default Chapati :<strong> {item.chapatiCount}</strong>
                 </span>
                 <span>|</span>
-                <span>
+                {/* <span>
                   Default Rice Portion :
                   <strong> {item.defaultRicePortion}</strong>
-                </span>
+                </span> */}
+                <Mutation
+                  mutation={DELETE_USER}
+                  variables={{ id: item._id }}
+                  update={(store, { data: { deleteUser } }) =>
+                    props.deleteUser(store, deleteUser)
+                  }
+                >
+                  {deleteUserMutation => (
+                    <>
+                      <Button onClick={() => props.editUser(item._id)}>Edit</Button>
+                      <Button type="submit" onClick={deleteUserMutation}>
+                        Delete
+										</Button>
+                    </>
+                  )}
+                </Mutation>
               </Card.Description>
             </Card.Content>
           </Card>
         );
       })}
-      {/* <Card>
-        <Card.Content>
-          <Card.Header>Steve Sanders</Card.Header>
-          <Card.Meta>Friends of Elliot</Card.Meta>
-          <Card.Description>
-            Steve wants to add you to the group <strong>best friends</strong>
-          </Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          <div className="ui two buttons">
-            <Button basic color="green">
-              Approve
-            </Button>
-            <Button basic color="red">
-              Decline
-            </Button>
-          </div>
-        </Card.Content>
-      </Card> */}
     </div>
   );
 };
