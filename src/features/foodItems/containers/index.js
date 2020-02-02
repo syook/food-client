@@ -1,164 +1,131 @@
-import React from 'react';
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-import { withApollo } from 'react-apollo';
+import React, { useState } from 'react';
+import { Button, Modal, Form } from 'semantic-ui-react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import FoodItemsForm from './form';
-import FoodItemTable from './table';
-import { Button } from 'semantic-ui-react';
-import { Mutation } from 'react-apollo';
+import { FOOD_ITEM_QUERY, CREATE_FOOD_ITEM_MUTATION, UPDATE_FOOD_ITEM_MUTATION, DElETE_FOOD_ITEM } from '../graphQl';
 
-const FOOD_ITEM_QUERY = gql`
-	{
-		foodItems {
-			_id
-			name
-			type
-		}
-	}
-`;
+const options = [
+  { text: 'Breakfast', value: 'breakfast' },
+  { text: 'Lunch', value: 'lunch' }
+];
 
-const GET_FOOD_ITEM = gql`
-	query GetFoodItemQuery($id: String!) {
-		foodItem(id: $id) {
-			_id
-			name
-			type
-		}
-	}
-`;
+const FoodItem = () => {
+  const { loading, error, data } = useQuery(FOOD_ITEM_QUERY);
 
-const DElETE_FOOD_ITEM = gql`
-	mutation deleteFoodItemMutation($id: String!) {
-		deleteFoodItem(id: $id) {
-			_id
-		}
-	}
-`;
+  const [addFoodItem] = useMutation(CREATE_FOOD_ITEM_MUTATION, {
+    update(cache, { data }) {
+      const { foodItems } = cache.readQuery({ query: FOOD_ITEM_QUERY });
+      cache.writeQuery({
+        query: FOOD_ITEM_QUERY,
+        data: { foodItems: foodItems.push(data.createFoodItem) }
+      });
+    }
+  });
 
-class FoodItems extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: [
-				{ name: 'sandwich', type: 'breakfast' },
-				{ name: 'paratha', type: 'breakfast' },
-				{ name: 'sandwich', type: 'breakfast' },
-				{ name: 'paratha', type: 'breakfast' },
-				{ name: 'sandwich', type: 'breakfast' },
-				{ name: 'paratha', type: 'breakfast' },
-				{ name: 'sandwich', type: 'breakfast' },
-				{ name: 'paratha', type: 'breakfast' },
-			],
-			isAddItem: false,
-			foodItem: null,
-		};
-	}
+  const [updateFoodItem] = useMutation(UPDATE_FOOD_ITEM_MUTATION, {
+    update(cache, { data }) {
+      const { foodItems } = cache.readQuery({ query: FOOD_ITEM_QUERY });
+      const index = foodItems.findIndex(f => f._id === data.updateFoodItem._id);
+      foodItems[index] = data.updateFoodItem;
+      cache.writeQuery({
+        query: FOOD_ITEM_QUERY,
+        data: { foodItems }
+      });
+    }
+  });
 
-	componentDidMount() {
-		if (this.props.match.params.id) {
-			this.fetchFoodItem(this.props.match.params.id);
-		}
-	}
+  const [deleteFoodItem] = useMutation(DElETE_FOOD_ITEM, {
+    update(cache, { data }) {
+      const { foodItems } = cache.readQuery({ query: FOOD_ITEM_QUERY });
+      cache.writeQuery({
+        query: FOOD_ITEM_QUERY,
+        data: { foodItems: foodItems.filter(f => f._id !== data.deleteFoodItem._id) }
+      });
+    }
+  });
 
-	componentDidUpdate(prevProps) {
-		if (this.props.match.params.id !== prevProps.match.params.id)
-			if (this.props.match.params.id !== prevProps.match.params.id) {
-				this.fetchFoodItem(this.props.match.params.id);
-			}
-	}
+  let [menuItem, setMenuItem] = useState({ id: null, name: '', type: 'breakfast' });
+  const [openModal, setOpenModal] = useState(false);
 
-	fetchFoodItem = async id => {
-		const response = await this.props.client.query({
-			query: GET_FOOD_ITEM,
-			variables: { id },
-		});
-		const { foodItem } = response.data;
-		this.setState({ foodItem });
-	};
+  const toggleOpenModal = menuItem => {
+    setOpenModal(!openModal);
+    setMenuItem({
+      id: menuItem ? menuItem._id : null,
+      name: menuItem ? menuItem.name : '',
+      type: menuItem ? menuItem.type : 'breakfast'
+    });
+  };
 
-	toggle = () => {
-		this.setState({ isAddItem: !this.state.isAddItem });
-	};
+  const submit = e => {
+    e.preventDefault();
 
-	addFoodItem = (store, foodItem) => {
-		const data = store.readQuery({ query: FOOD_ITEM_QUERY });
-		data.foodItems.unshift(foodItem);
-		store.writeQuery({
-			query: FOOD_ITEM_QUERY,
-			data,
-		});
-	};
+    const { id, ...rest } = menuItem;
+    if (!menuItem.id) addFoodItem({ variables: { ...rest } });
+    if (menuItem.id) updateFoodItem({ variables: { id, ...rest } });
 
-	updateFoodItem = (store, foodItem) => {
-		const data = store.readQuery({ query: FOOD_ITEM_QUERY });
-		const index = data.foodItems.findIndex(item => item._id === foodItem._id);
-		data[index] = foodItem;
-		store.writeQuery({
-			query: FOOD_ITEM_QUERY,
-			data,
-		});
-	};
+    toggleOpenModal();
+  };
 
-	editFoodItem = id => {
-		this.props.history.push(`/fooditems/${id}`);
-	};
+  if (loading) return <div>Fetching</div>;
+  if (error) return <div>Error</div>;
 
-	deleteFoodItem = (store, foodItem) => {
-		const data = store.readQuery({ query: FOOD_ITEM_QUERY });
-		const index = data.foodItems.findIndex(item => item._id === foodItem._id);
-		const newData = [...data.foodItems];
-		newData.splice(index, 1);
-		store.writeQuery({
-			query: FOOD_ITEM_QUERY,
-			data: { ...data, foodItems: newData },
-		});
-	};
+  return (
+    <div>
+      <div>
+        <p>Name - Type - </p>
+        <Button onClick={toggleOpenModal}>Add</Button>
+      </div>
 
-	render() {
-		return (
-			<div style={{ marginTop: '80px', width: '90vw' }}>
-				<FoodItemsForm toggle={this.toggle} addFoodItem={this.addFoodItem} updateFoodItem={this.updateFoodItem} foodItem={this.state.foodItem} />
+      {data.foodItems.map(foodItem => (
+        <p key={foodItem._id}>
+          {foodItem.name} - {foodItem.type} -{' '}
+          <Button
+            onClick={e => {
+              e.preventDefault();
+              toggleOpenModal(foodItem);
+            }}
+          >
+            Edit
+          </Button>{' '}
+          -{' '}
+          <Button type="submit" onClick={e => deleteFoodItem({ variables: { id: foodItem._id } })}>
+            Delete
+          </Button>
+        </p>
+      ))}
 
-				<>
-					<FoodItemTable currentData={this.state.data} toggle={this.toggle} />
-					<Query query={FOOD_ITEM_QUERY}>
-						{({ loading, error, data }) => {
-							if (loading) return <div>Fetching</div>;
-							if (error) return <div>Error</div>;
+      <div>
+        <Modal open={openModal} onClose={toggleOpenModal} closeIcon>
+          <div>
+            <Form>
+              <Form.Field>
+                <label> Name</label>
+                <input
+                  placeholder="Item Name"
+                  type="text"
+                  value={menuItem.name || ''}
+                  onChange={e => setMenuItem({ ...menuItem, name: e.target.value })}
+                />
+              </Form.Field>
 
-							const foodItems = data.foodItems;
-							return (
-								<div>
-									{foodItems.map(foodItem => (
-										<>
-											<p>
-												{foodItem.name} - {foodItem.type} -{' '}
-												<Button onClick={() => this.editFoodItem(foodItem._id)}>Edit</Button>
-												<Mutation
-													mutation={DElETE_FOOD_ITEM}
-													variables={{ id: foodItem._id }}
-													update={(store, { data: { deleteFoodItem } }) =>
-														this.deleteFoodItem(store, deleteFoodItem)
-													}
-												>
-													{deleteFoodItemMutation => (
-														<Button type="submit" onClick={deleteFoodItemMutation}>
-															Delete
-														</Button>
-													)}
-												</Mutation>
-											</p>
-										</>
-									))}
-								</div>
-							);
-						}}
-					</Query>
-				</>
-			</div>
-		);
-	}
-}
+              <Form.Field>
+                <Form.Dropdown
+                  fluid
+                  placeholder="Rice"
+                  options={options}
+                  value={menuItem.type}
+                  onChange={(e, { value }) => setMenuItem({ ...menuItem, type: value })}
+                />
+              </Form.Field>
 
-export default withApollo(FoodItems);
+              <Button onClick={toggleOpenModal}>Cancel</Button>
+              <Button onClick={submit}>Submit</Button>
+            </Form>
+          </div>
+        </Modal>
+      </div>
+    </div>
+  );
+};
+
+export default FoodItem;

@@ -9,9 +9,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const httpLink = createHttpLink({
-	uri: 'http://localhost:4000',
-});
+const httpLink = createHttpLink({ uri: "http://localhost:4000" });
 
 const client = new ApolloClient({
 	link: httpLink,

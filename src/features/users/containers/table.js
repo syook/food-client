@@ -1,13 +1,13 @@
-import React from "react";
-import { Icon, Card, Button } from "semantic-ui-react";
-import { Mutation } from 'react-apollo'
-import gql from 'graphql-tag'
+import React from 'react';
+import { Card, Button } from 'semantic-ui-react';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
 const DELETE_USER = gql`
-	mutation deleteUserMutation($id: String!) {
-		deleteUser(id: $id) {
-			_id
-		}
-	}
+  mutation deleteUserMutation($id: String!) {
+    deleteUser(id: $id) {
+      _id
+    }
+  }
 `;
 
 const UserTable = props => {
@@ -20,9 +20,7 @@ const UserTable = props => {
               <Card.Header>{item.name}</Card.Header>
               <Card.Meta>{item.email}</Card.Meta>
               <Card.Meta>{item.mobile}</Card.Meta>
-              <Card.Description
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
+              <Card.Description style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>
                   Default Chapati :<strong> {item.chapatiCount}</strong>
                 </span>
@@ -34,16 +32,14 @@ const UserTable = props => {
                 <Mutation
                   mutation={DELETE_USER}
                   variables={{ id: item._id }}
-                  update={(store, { data: { deleteUser } }) =>
-                    props.deleteUser(store, deleteUser)
-                  }
+                  update={(store, { data: { deleteUser } }) => props.deleteUser(store, deleteUser)}
                 >
                   {deleteUserMutation => (
                     <>
                       <Button onClick={() => props.editUser(item._id)}>Edit</Button>
                       <Button type="submit" onClick={deleteUserMutation}>
                         Delete
-										</Button>
+                      </Button>
                     </>
                   )}
                 </Mutation>
